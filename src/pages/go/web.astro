@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const target = 'https://prod-lobby-1.tonpoker.online/?ref=653c198871ee59efbe0bbd4a';
+---
+
+<BaseLayout
+  title="Переход в web-версию TON Poker"
+  description="Перенаправляем в web-версию TON Poker."
+  noindex={true}
+>
+  <meta slot="head" http-equiv="refresh" content={`0;url=${target}`} />
+  <main class="container section">
+    <h1>Открываем web-версию TON Poker</h1>
+    <p class="lead">Если переход не начался автоматически, нажмите кнопку ниже.</p>
+    <a class="button button-primary" href={target} rel="sponsored nofollow">Перейти в web-лобби</a>
+  </main>
+  <script is:inline define:vars={{ target }}>
+    window.location.replace(target);
+  </script>
+</BaseLayout>

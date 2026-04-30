@@ -1,0 +1,295 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'TON Poker на русском: крипто-покер без KYC в браузере';
+const description =
+  'Русский обзор TON Poker: играйте в Texas Holdem и PLO через web-версию или Telegram, пополняйте криптовалютой и выводите средства без лишних анкет.';
+
+const faqs = [
+  {
+    question: 'KYC не нужен?',
+    answer:
+      'Верно. По информации TON Poker, они не запрашивают сканы паспортов и селфи. Чтобы начать игру, достаточно войти через никнейм и пароль.',
+  },
+  {
+    question: 'Что лучше выбрать: веб-версию или приложение в Телеграм?',
+    answer:
+      'Веб-версия актуальнее и не зависит от работы Telegram. Она открывается во всех современных браузерах и удобнее для игры за несколькими столами.',
+  },
+  {
+    question: 'Можно ли играть с телефона?',
+    answer:
+      'Да. WEB-версия открывается на любых устройствах, а её ссылку можно добавить на главный экран как ярлык.',
+  },
+  {
+    question: 'Какие криптовалюты поддерживаются?',
+    answer:
+      'Список постоянно дополняется. На данный момент наибольшей популярностью пользуются USDT (ERC-20 и TRC-20), BTC, ETH, SOL, TON, а также Telegram-сервисы Cryptobot и xRocket.',
+  },
+  {
+    question: 'Как быстро происходит вывод средств?',
+    answer:
+      'По информации TON Poker, отправка выплаты происходит в среднем за ~12 секунд после вашего запроса. Далее, скорость зачисления зависит от выбранной сети, комиссии и загруженности блокчейна.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <main class="page">
+    <div
+      id="age-gate"
+      class="age-gate"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="age-gate-title"
+      hidden
+    >
+      <div class="age-gate-card">
+        <h2 id="age-gate-title">Подтвердите возраст</h2>
+        <div class="age-actions">
+          <button class="button button-primary" type="button" data-age-confirm>
+            Мне уже есть 18 лет
+          </button>
+          <button class="button button-secondary" type="button" data-age-reject>
+            Скоро будет
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="Главная навигация">
+      <div class="container nav-inner">
+        <a class="brand" href="/" aria-label="TON Poker">
+          <img src="/ton-poker-logo.png" alt="TON Poker logo" width="44" height="44" />
+          <span class="brand-text">TON POKER</span>
+        </a>
+        <div class="nav-links">
+          <a href="#why">Почему мы?</a>
+          <a href="#start">Как начать</a>
+          <a href="#access">Web / Telegram App</a>
+          <a href="#faq">FAQ</a>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow"><span class="live-dot"></span> Web-версия и Telegram App</p>
+          <h1>
+            Крипто-покер <span class="gradient-text">без лишних вопросов</span>
+          </h1>
+          <p class="lead">
+            Играй прямо в браузере: No Limit Holdem и Pot Limit Omaha. Мгновенные депозиты
+            в криптовалюте: USDT, BTC, ETH, SOL, TON и другие.
+          </p>
+          <div class="actions">
+            <a class="button button-primary" href="/go/web" rel="sponsored">Играть в браузере</a>
+            <a class="button button-secondary" href="/go/tg" rel="sponsored">Открыть в Telegram</a>
+          </div>
+        </div>
+
+        <aside class="lobby-card" aria-label="Визуал покерного стола">
+          <div class="table">
+            <div class="cards">
+              <span class="card" style="--rot: -7deg">A</span>
+              <span class="card" style="--rot: 5deg">K</span>
+            </div>
+            <span class="seat">USDT</span>
+            <span class="seat">SOL</span>
+            <span class="seat">ETH</span>
+            <span class="seat">BTC</span>
+            <span class="seat">DOGS</span>
+            <span class="seat">TON</span>
+          </div>
+          <div class="stats-strip">
+            <div class="stat">
+              <strong>24/7</strong>
+              <span>игра онлайн</span>
+            </div>
+            <div class="stat">
+              <strong>~12 сек</strong>
+              <span>вывод средств</span>
+            </div>
+            <div class="stat">
+              <strong>No KYC</strong>
+              <span>анонимность</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="why" class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">Почему ТОН ПОКЕР</p>
+          <h2>Покер для тех, кто просто хочет играть</h2>
+        </div>
+
+        <div class="feature-grid">
+          <article class="card-block">
+            <div class="icon">01</div>
+            <h3>Безопасность</h3>
+            <p>Без привязки банковских карт. Полный контроль над депозитом в крипте.</p>
+          </article>
+          <article class="card-block">
+            <div class="icon">02</div>
+            <h3>Без анкет и документов</h3>
+            <p>Только никнейм и пароль.</p>
+          </article>
+          <article class="card-block">
+            <div class="icon">03</div>
+            <h3>Web и Telegram</h3>
+            <p>Синхронизация между компьютером, iPhone и Android.</p>
+          </article>
+          <article class="card-block">
+            <div class="icon">04</div>
+            <h3>NLH и PLO</h3>
+            <p>Кэш-столы и бесплатные турниры круглосуточно.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="start" class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">ЛЁГКИЙ СТАРТ</p>
+          <h2>Как начать играть</h2>
+        </div>
+
+        <div class="steps">
+          <article class="step">
+            <h3>Откройте web-версию</h3>
+            <p>Укажите никнейм и пароль. Почту подтверждать не нужно.</p>
+          </article>
+          <article class="step">
+            <h3>Пополните баланс</h3>
+            <p>Выберите привычную монету/сеть и отправьте на свой адрес.</p>
+          </article>
+          <article class="step">
+            <h3>Вибирайте стол</h3>
+            <p>Холдем или Омаха. Низкие, средние или VIP стеки.</p>
+          </article>
+          <article class="step">
+            <h3>Вывод за секунды</h3>
+            <p>Укажите адрес своего кошелька и деньги поступят за секунды.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="access" class="section">
+      <div class="container split">
+        <article class="choice featured">
+          <h3>Веб-клиент</h3>
+          <p>
+            Играть в родном браузере на десктопе, на iPhone в Safari или на Android в Chrome.<br /><br />Не страшны
+            блокировки Telegram.<br /><br />Легко переключаться между своими устройствами.
+          </p>
+          <a class="button button-primary" href="/go/web" rel="sponsored">Перейти в web-лобби</a>
+        </article>
+        <article class="choice">
+          <h3>Telegram App</h3>
+          <p>Игра прямо в Telegram. Подходит для того, чтобы скоротать время, не покидая любимый мессенджер.</p>
+          <a class="button button-secondary" href="/go/tg" rel="sponsored">Открыть в Telegram</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">FAQ</p>
+          <h2>Популярные вопросы</h2>
+        </div>
+
+        <div class="faq-list">
+          {
+            faqs.map((item) => (
+              <article class="faq">
+                <h3>{item.question}</h3>
+                <p>{item.answer}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container final-cta">
+        <p class="kicker">Твоё место пустует</p>
+        <h2>Открой свой первый стол на TON Poker</h2>
+        <div class="actions">
+          <a class="button button-primary" href="/go/web" rel="sponsored">Играть в браузере</a>
+          <a class="button button-secondary" href="/go/tg" rel="sponsored">Попробовать Telegram App</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div>
+          <strong>TON Poker CIS</strong>
+          <p class="small">Информационный партнёрский сайт. Не является оператором покер-рума.</p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script is:inline>
+    const ageGate = document.querySelector('#age-gate');
+    const confirmButton = document.querySelector('[data-age-confirm]');
+    const rejectButton = document.querySelector('[data-age-reject]');
+    const storageKey = 'ton-poker-age-confirmed';
+
+    const closeAgeGate = () => {
+      ageGate?.setAttribute('hidden', '');
+      document.body.classList.remove('age-gate-open');
+    };
+
+    const hasConfirmedAge = () => {
+      try {
+        return localStorage.getItem(storageKey) === 'yes';
+      } catch {
+        return false;
+      }
+    };
+
+    if (ageGate && !hasConfirmedAge()) {
+      ageGate.removeAttribute('hidden');
+      document.body.classList.add('age-gate-open');
+      confirmButton?.focus();
+    }
+
+    confirmButton?.addEventListener('click', () => {
+      try {
+        localStorage.setItem(storageKey, 'yes');
+      } catch {
+        // Если storage недоступен, просто закрываем проверку для текущей сессии.
+      }
+      closeAgeGate();
+    });
+
+    rejectButton?.addEventListener('click', () => {
+      window.location.href = 'https://www.google.com/';
+    });
+  </script>
+</BaseLayout>

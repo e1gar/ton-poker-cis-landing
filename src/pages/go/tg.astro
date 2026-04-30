@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const target =
+  'https://t.me/myTonPokerBot/lobby?startapp=eyJhZnAiOiJPRGczTVRKbE9UQTBPREZqWVdGaU9XWXhOREk0TVdGa1pUSXhPVFZrWVRVIn0';
+---
+
+<BaseLayout
+  title="Переход в Telegram TON Poker"
+  description="Перенаправляем в Telegram-вход TON Poker."
+  noindex={true}
+>
+  <meta slot="head" http-equiv="refresh" content={`0;url=${target}`} />
+  <main class="container section">
+    <h1>Открываем TON Poker в Telegram</h1>
+    <p class="lead">Если переход не начался автоматически, нажмите кнопку ниже.</p>
+    <a class="button button-primary" href={target} rel="sponsored nofollow">Открыть Telegram-вход</a>
+  </main>
+  <script is:inline define:vars={{ target }}>
+    window.location.replace(target);
+  </script>
+</BaseLayout>
