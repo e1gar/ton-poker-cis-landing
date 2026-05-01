@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const title = 'TON Poker на русском: крипто-покер без KYC в браузере';
 const description =
-  'Русский обзор TON Poker: играйте в Texas Holdem и PLO через web-версию или Telegram, пополняйте криптовалютой и выводите средства без лишних анкет.';
+  'Русский обзор TON Poker: играйте в Texas Hold\'em и PLO через web-версию или Telegram, пополняйте криптовалютой и выводите средства без лишних анкет.';
 
 const faqs = [
   {
@@ -15,11 +15,13 @@ const faqs = [
     question: 'Что лучше выбрать: веб-версию или приложение в Телеграм?',
     answer:
       'Веб-версия актуальнее и не зависит от работы Telegram. Она открывается во всех современных браузерах и удобнее для игры за несколькими столами.',
+    linkPhraseToWeb: 'Веб-версия',
   },
   {
     question: 'Можно ли играть с телефона?',
     answer:
-      'Да. WEB-версия открывается на любых устройствах, а её ссылку можно добавить на главный экран как ярлык.',
+      'Да, web-страница TON Poker открывается на любых устройствах, а ссылку на неё можно добавить на главный экран как ярлык.',
+    linkPhraseToWeb: 'TON Poker',
   },
   {
     question: 'Какие криптовалюты поддерживаются?',
@@ -44,6 +46,20 @@ const faqSchema = {
       text: item.answer,
     },
   })),
+};
+
+const faqWebLinkParts = (
+  answer: string,
+  phrase: string | undefined
+): { before: string; phrase: string; after: string } | null => {
+  if (!phrase) return null;
+  const index = answer.indexOf(phrase);
+  if (index === -1) return null;
+  return {
+    before: answer.slice(0, index),
+    phrase,
+    after: answer.slice(index + phrase.length),
+  };
 };
 ---
 
@@ -95,7 +111,7 @@ const faqSchema = {
             Крипто-покер <span class="gradient-text">без лишних вопросов</span>
           </h1>
           <p class="lead">
-            Играй прямо в браузере: No Limit Holdem и Pot Limit Omaha. Мгновенные депозиты
+            Играй прямо в браузере: No Limit Hold'em и Pot Limit Omaha. Мгновенные депозиты
             в криптовалюте: USDT, BTC, ETH, SOL, TON и другие.
           </p>
           <div class="actions">
@@ -124,9 +140,9 @@ const faqSchema = {
             </div>
             <div class="stat">
               <strong>~12 сек</strong>
-              <span>вывод средств</span>
+              <span>на вывод</span>
             </div>
-            <div class="stat">
+            <div class="stat stat-accent">
               <strong>No KYC</strong>
               <span>анонимность</span>
             </div>
@@ -139,7 +155,7 @@ const faqSchema = {
       <div class="container">
         <div class="section-head">
           <p class="kicker">Почему ТОН ПОКЕР</p>
-          <h2>Покер для тех, кто просто хочет играть</h2>
+          <h2>Покер без бюрократии</h2>
         </div>
 
         <div class="feature-grid">
@@ -161,35 +177,7 @@ const faqSchema = {
           <article class="card-block">
             <div class="icon">04</div>
             <h3>NLH и PLO</h3>
-            <p>Кэш-столы и бесплатные турниры круглосуточно.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="start" class="section">
-      <div class="container">
-        <div class="section-head">
-          <p class="kicker">ЛЁГКИЙ СТАРТ</p>
-          <h2>Как начать играть</h2>
-        </div>
-
-        <div class="steps">
-          <article class="step">
-            <h3>Откройте web-версию</h3>
-            <p>Укажите никнейм и пароль. Почту подтверждать не нужно.</p>
-          </article>
-          <article class="step">
-            <h3>Пополните баланс</h3>
-            <p>Выберите привычную монету/сеть и отправьте на свой адрес.</p>
-          </article>
-          <article class="step">
-            <h3>Вибирайте стол</h3>
-            <p>Холдем или Омаха. Низкие, средние или VIP стеки.</p>
-          </article>
-          <article class="step">
-            <h3>Вывод за секунды</h3>
-            <p>Укажите адрес своего кошелька и деньги поступят за секунды.</p>
+            <p>Non-stop. Кэш-столы и бесплатные турниры.</p>
           </article>
         </div>
       </div>
@@ -213,6 +201,34 @@ const faqSchema = {
       </div>
     </section>
 
+    <section id="start" class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">ЛЁГКИЙ СТАРТ</p>
+          <h2>Как начать играть</h2>
+        </div>
+
+        <div class="steps">
+          <a class="step" href="/go/web" rel="sponsored">
+            <h3>Откройте web-версию</h3>
+            <p>Укажите никнейм и пароль. Почту подтверждать не нужно.</p>
+          </a>
+          <article class="step">
+            <h3>Пополните баланс</h3>
+            <p>Выберите привычную монету/сеть и отправьте на свой адрес.</p>
+          </article>
+          <article class="step">
+            <h3>Выбирайте стол</h3>
+            <p>Холдем или Омаха. Низкие, средние или VIP стеки.</p>
+          </article>
+          <article class="step">
+            <h3>Вывод за секунды</h3>
+            <p>Укажите адрес своего кошелька и деньги поступят за секунды.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section id="faq" class="section">
       <div class="container">
         <div class="section-head">
@@ -225,7 +241,24 @@ const faqSchema = {
             faqs.map((item) => (
               <article class="faq">
                 <h3>{item.question}</h3>
-                <p>{item.answer}</p>
+                <p>
+                  {
+                    (() => {
+                      const parts = faqWebLinkParts(item.answer, item.linkPhraseToWeb);
+                      return parts ? (
+                        <>
+                          {parts.before}
+                          <a href="/go/web" rel="sponsored" class="faq-link">
+                            {parts.phrase}
+                          </a>
+                          {parts.after}
+                        </>
+                      ) : (
+                        item.answer
+                      );
+                    })()
+                  }
+                </p>
               </article>
             ))
           }
@@ -235,7 +268,7 @@ const faqSchema = {
 
     <section class="section">
       <div class="container final-cta">
-        <p class="kicker">Твоё место пустует</p>
+        <p class="kicker">Ещё не в раздаче?</p>
         <h2>Открой свой первый стол на TON Poker</h2>
         <div class="actions">
           <a class="button button-primary" href="/go/web" rel="sponsored">Играть в браузере</a>
@@ -246,10 +279,7 @@ const faqSchema = {
 
     <footer class="footer">
       <div class="container footer-inner">
-        <div>
-          <strong>TON Poker CIS</strong>
-          <p class="small">Информационный партнёрский сайт. Не является оператором покер-рума.</p>
-        </div>
+        <p class="small">2026. Информационный партнёрский сайт. Не является оператором покер-рума. 18+</p>
       </div>
     </footer>
   </main>

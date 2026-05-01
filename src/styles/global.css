@@ -155,14 +155,14 @@ a {
 
 .hero {
   position: relative;
-  padding: 74px 0 64px;
+  padding: 54px 0 48px;
 }
 
 .hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(340px, 0.9fr);
   align-items: center;
-  gap: 54px;
+  gap: 40px;
 }
 
 .eyebrow {
@@ -385,13 +385,28 @@ h1 {
   font-size: 22px;
 }
 
+.stat-accent {
+  position: relative;
+  border-color: rgba(77, 255, 156, 0.45);
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(77, 255, 156, 0.22), transparent 55%),
+    rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 0 0 1px rgba(77, 255, 156, 0.14),
+    0 14px 38px rgba(20, 216, 115, 0.16);
+}
+
+.stat-accent strong {
+  text-shadow: 0 0 22px rgba(77, 255, 156, 0.38);
+}
+
 .section {
-  padding: 76px 0;
+  padding: 52px 0;
 }
 
 .section-head {
   max-width: 720px;
-  margin-bottom: 34px;
+  margin-bottom: 24px;
 }
 
 .kicker {
@@ -465,6 +480,24 @@ h2 {
   counter-increment: steps;
 }
 
+a.step {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+a.step:hover {
+  border-color: rgba(77, 255, 156, 0.28);
+}
+
+a.step:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+
 .step::before {
   content: "0" counter(steps);
   display: inline-block;
@@ -523,8 +556,18 @@ h2 {
   margin-bottom: 8px;
 }
 
+.faq-link {
+  color: var(--green);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.faq-link:hover {
+  color: #b8ffd8;
+}
+
 .final-cta {
-  padding: 54px;
+  padding: 40px;
   border: 1px solid rgba(77, 255, 156, 0.26);
   border-radius: 38px;
   background:
@@ -539,7 +582,7 @@ h2 {
 }
 
 .footer {
-  padding: 38px 0 48px;
+  padding: 28px 0 32px;
   border-top: 1px solid var(--line);
 }
 
@@ -580,7 +623,7 @@ h2 {
   }
 
   .hero {
-    padding-top: 42px;
+    padding: 38px 0 36px;
   }
 
   .brand-text {
@@ -617,8 +660,12 @@ h2 {
     font-size: 14px;
   }
 
+  .section {
+    padding: 42px 0;
+  }
+
   .final-cta {
-    padding: 30px 18px;
+    padding: 26px 16px;
   }
 
   .footer-inner {
