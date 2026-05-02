@@ -2,6 +2,7 @@
 #
 # Секреты в GitHub (в репо не коммитить): Settings → Secrets → Actions
 #   REMOTE_HOST, REMOTE_USER, REMOTE_PATH, REMOTE_PRIVATE_KEY
+#   REMOTE_PATH — полный абсолютный путь к public_html (из панели Beget), без кавычек в секрете.
 #
 # REMOTE_PRIVATE_KEY — приватная половина того ключа, которым ты уже входишь на Beget по SSH.
 # При нестандартном порте SSH добавь ниже remote_port и секрет REMOTE_PORT.
@@ -62,8 +63,14 @@ jobs:
           echo "$REMOTE_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keygen -y -f ~/.ssh/deploy_key >/dev/null
-          DEST="${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH%/}/"
-          rsync -avzr --delete \
-            -e "ssh -i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new" \
-            dist/ "$DEST"
+          SSH_OPTS="-i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
+          REMOTE_PATH_TRIM="$(printf '%s' "$REMOTE_PATH" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          SSH_BASE="${REMOTE_PATH_TRIM%/}"
+          ssh $SSH_OPTS "${REMOTE_USER}@${REMOTE_HOST}" "test -d \"$SSH_BASE\"" || {
+            echo "::error::Нет каталога REMOTE_PATH на сервере. Укажи в секретах полный путь к public_html из Beget (абсолютный, например /home/USER/.../public_html)."
+            exit 1
+          }
+          rsync -avzr --delete --mkpath \
+            -e "ssh $SSH_OPTS" \
+            dist/ "${REMOTE_USER}@${REMOTE_HOST}:${SSH_BASE}/"
           rm -f ~/.ssh/deploy_key
