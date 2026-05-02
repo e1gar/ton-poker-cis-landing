@@ -35,17 +35,36 @@ const faqs = [
   },
 ];
 
-const faqSchema = {
+const siteBase = String(import.meta.env.SITE ?? '').replace(/\/$/, '');
+
+const ldGraph = {
   '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((item) => ({
-    '@type': 'Question',
-    name: item.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.answer,
+  '@graph': [
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
     },
-  })),
+    {
+      '@type': 'WebSite',
+      '@id': `${siteBase}/#website`,
+      url: siteBase,
+      name: 'TON Poker — русский обзор',
+      publisher: { '@id': `${siteBase}/#organization` },
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${siteBase}/#organization`,
+      url: siteBase,
+      name: 'webpoker.info',
+    },
+  ],
 };
 
 const faqWebLinkParts = (
@@ -64,7 +83,7 @@ const faqWebLinkParts = (
 ---
 
 <BaseLayout title={title} description={description}>
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(ldGraph)} />
 
   <main class="page">
     <div
@@ -115,8 +134,8 @@ const faqWebLinkParts = (
             в криптовалюте: USDT, BTC, ETH, SOL, TON и другие.
           </p>
           <div class="actions">
-            <a class="button button-primary" href="/go/web" rel="sponsored">Играть в браузере</a>
-            <a class="button button-secondary" href="/go/tg" rel="sponsored">Открыть в Telegram</a>
+            <a class="button button-primary" href="/partner/web" rel="sponsored">Играть в браузере</a>
+            <a class="button button-secondary" href="/partner/tg" rel="sponsored">Открыть в Telegram</a>
           </div>
         </div>
 
@@ -191,12 +210,12 @@ const faqWebLinkParts = (
             Играть в родном браузере на десктопе, на iPhone в Safari или на Android в Chrome.<br /><br />Не страшны
             блокировки Telegram.<br /><br />Легко переключаться между своими устройствами.
           </p>
-          <a class="button button-primary" href="/go/web" rel="sponsored">Перейти в web-лобби</a>
+          <a class="button button-primary" href="/partner/web" rel="sponsored">Перейти в web-лобби</a>
         </article>
         <article class="choice">
           <h3>Telegram App</h3>
           <p>Игра прямо в Telegram. Подходит для того, чтобы скоротать время, не покидая любимый мессенджер.</p>
-          <a class="button button-secondary" href="/go/tg" rel="sponsored">Открыть в Telegram</a>
+          <a class="button button-secondary" href="/partner/tg" rel="sponsored">Открыть в Telegram</a>
         </article>
       </div>
     </section>
@@ -209,7 +228,7 @@ const faqWebLinkParts = (
         </div>
 
         <div class="steps">
-          <a class="step" href="/go/web" rel="sponsored">
+          <a class="step" href="/partner/web" rel="sponsored">
             <h3>Откройте web-версию</h3>
             <p>Укажите никнейм и пароль. Почту подтверждать не нужно.</p>
           </a>
@@ -248,7 +267,7 @@ const faqWebLinkParts = (
                       return parts ? (
                         <>
                           {parts.before}
-                          <a href="/go/web" rel="sponsored" class="faq-link">
+                          <a href="/partner/web" rel="sponsored" class="faq-link">
                             {parts.phrase}
                           </a>
                           {parts.after}
@@ -271,8 +290,8 @@ const faqWebLinkParts = (
         <p class="kicker">Ещё не в раздаче?</p>
         <h2>Открой свой первый стол на TON Poker</h2>
         <div class="actions">
-          <a class="button button-primary" href="/go/web" rel="sponsored">Играть в браузере</a>
-          <a class="button button-secondary" href="/go/tg" rel="sponsored">Попробовать Telegram App</a>
+          <a class="button button-primary" href="/partner/web" rel="sponsored">Играть в браузере</a>
+          <a class="button button-secondary" href="/partner/tg" rel="sponsored">Попробовать Telegram App</a>
         </div>
       </div>
     </section>

@@ -1,0 +1,115 @@
+Деплой cis-landing на Beget + DNS (Porkbun + Beget)
+=======================================================
+
+Почему автоматом не получится: вход в Porkbun и Beget есть только у владельца аккаунта.
+
+Два режима — выбери ОДИН
+-------------------------
+
+В интерфейсе Beget («Настройки DNS» рядом с доменами) указаны имена NS Beget —
+это нужно, если ты хочешь вести ВСЮ зону (A, MX, TXT) уже в Бегете.
+
+• Вариант 1 — NS остаются у Porkbun
+  Зона живёт на Porkbun: все A/MX редактируешь ТАМ в DNS Records.
+
+• Вариант 2 — NS перенести на Beget (рекомендуют в боковой панели Beget)
+  В Porkbun меняются только NAMESERVERS (не отдельные A-записи там — зону Porkbun
+  ты больше не используешь). Дальше A/MX только: Beget → домен → «Редактировать DNS».
+
+  В панели Beget обычно перечисляют сервера (пример, скопировать оттуда дословно):
+    ns1.beget.com  |  ns2.beget.com
+    ns1.beget.pro |  ns2.beget.pro
+  Porkbun: Domain → Nameservers → вставить эти записи как у регистратора (сколько слотов есть — см. доку Porkbun; если 4 недоступно, ставят минимально необходимую пару из подсказки Beget).
+
+  После пропагации проверка: nslookup -type=ns webpoker.info — должно показываться beget, не porkbundns.
+
+
+Вариант 1 — Porkbun ведёт зону (A в Porkbun)
+--------------------------------------------
+
+Шаг A. Узнай IP сайта на Beget
+-----------------------------
+Хостинг → Сайты → webpoker.info (или узел аккаунта elgar.beget.tech).
+Проверка: nslookup elgar.beget.tech (IP сверить с тем, что в панели, если указан явно).
+
+Запиши IP — в Porkbun для A/@ и при необходимости www.
+
+После правок A:
+nslookup webpoker.info
+
+
+Шаг B. Porkbun — только DNS-содержимое (раз NS у них)
+-----------------------------------------------------
+1. Porkbun → webpoker.info → DNS Records.
+
+2. Убрать/заменить парковочные записи Porkbun (часто 44.227.x.x), которые не про Beget.
+
+3. Добавить как минимум:
+   Тип A, Host пустой/@ → IP Beget.
+   Тип A, Host www → тот же IP (или www на CNAME, если Porkbun разрешает).
+
+4. Сохранить, подождать 15–60 мин.
+
+
+Вариант 2 — Beget ведёт зону (NS уже на Beget)
+----------------------------------------------
+После смены NS в Porkbun на ns*.beget.*:
+
+1. Beget → «Управление доменами» → у webpoker.info → «Редактировать DNS».
+
+2. Проверить, что есть A/@ (и при необходимости www) на нужный сервер сайта —
+   часто подставляются при добавлении домена к аккаунту; если записей нет — добавить
+   как в документации Beget (они подставят IP хостинга; отдельно «выкупать общий IP»
+   не нужно для обычного сайта).
+
+3. Если неясно какой адрес нужен для A:/@ — поддержка Beget или раздел помощи про
+   «DNS при размещении домена».
+
+Проверка: nslookup webpoker.info
+
+Шаг C. Beget: SSL
+-----------------
+Когда https://webpoker.info открывается хотя бы по HTTP с твоей заглушкой/файлами:
+Панель → домен webpoker.info → «Управление SSL сертификатами» → выпустить бесплатный (Let’s Encrypt).
+
+Шаг D. Залить билд
+------------------
+Из папки sites/cis-landing на своём ПК:
+
+  npm run build
+
+Содержимое папки dist/ → в public_html сайта (файловый менеджер, FTP или скрипт):
+
+  PowerShell (нужен OpenSSH, путь замени на свой из панели):
+  .\scripts\deploy-beget.ps1 -RemotePath "/home/ПОЛЬЗОВАТЕЛЬ/.../public_html"
+
+Git Bash / Linux / macOS:
+  ./scripts/deploy-beget.sh elgar elgar.beget.tech "/home/ПОЛЬЗОВАТЕЛЬ/.../public_html"
+
+Шаг E. Проверка
+---------------
+https://webpoker.info/
+https://webpoker.info/partner/web
+https://webpoker.info/partner/tg
+https://webpoker.info/sitemap-index.xml
+https://webpoker.info/robots.txt
+
+
+Деплой из GitHub Actions на Beget
+---------------------------------
+Workflow: [.github/workflows/deploy-beget.yml](.github/workflows/deploy-beget.yml) — уже в репозитории.
+
+Один раз в GitHub → Settings → Secrets → Actions добавь (в git их не коммить):
+  REMOTE_HOST        — например elgar.beget.tech
+  REMOTE_USER        — SSH login Beget
+  REMOTE_PATH        — абсолютный каталог public_html сайта (лучше с / на конце)
+  REMOTE_PRIVATE_KEY — приватный ключ того же ключевого набора, которым ты уже ходишь по SSH на Beget
+                       (BEGIN … END блок целиком; публичная половина уже на сервере)
+
+Нестандартный порт SSH: в workflow добавь `remote_port: ${{ secrets.REMOTE_PORT }}` и секрет REMOTE_PORT.
+
+Триггер: push в `main` или Run workflow из вкладки Actions.
+
+Если rsync на сервере нет — ошибка вида command not found; тогда поддержка Beget или выкладка SFTP другим экшеном / локальные scripts/deploy-beget.*.
+
+CDN Cloudflare перед Beget (прокси, SSL на edge): см. scripts/CLOUDFLARE-SETUP.txt

@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { PARTNER_QUERY_ALLOW_LIST } from '../lib/partnerQueryAllow';
+
+interface Props {
+  baseTarget: string;
+  title: string;
+  description: string;
+  heading: string;
+  lead: string;
+  buttonLabel: string;
+}
+
+const { baseTarget, title, description, heading, lead, buttonLabel } = Astro.props;
+
+const allowKeys = [...PARTNER_QUERY_ALLOW_LIST];
+---
+
+<BaseLayout title={title} description={description} noindex={true}>
+  <noscript slot="head">
+    <meta http-equiv="refresh" content={`0;url=${baseTarget}`} />
+  </noscript>
+  <main class="container section">
+    <h1>{heading}</h1>
+    <p class="lead">{lead}</p>
+    <a
+      class="button button-primary"
+      id="partner-outbound"
+      href={baseTarget}
+      rel="sponsored nofollow">{buttonLabel}</a>
+  </main>
+  <script is:inline define:vars={{ baseTarget, allowKeys }}>
+    (function () {
+      var u = new URL(baseTarget);
+      var allow = Object.create(null);
+      for (var i = 0; i < allowKeys.length; i++) allow[allowKeys[i]] = true;
+      var here = new URL(window.location.href);
+      here.searchParams.forEach(function (v, k) {
+        if (!v) return;
+        if (!allow[k.toLowerCase()]) return;
+        u.searchParams.set(k, v);
+      });
+      var finalUrl = u.href;
+      var m = document.createElement('meta');
+      m.setAttribute('http-equiv', 'refresh');
+      m.setAttribute('content', '0;url=' + finalUrl);
+      document.head.appendChild(m);
+      var a = document.getElementById('partner-outbound');
+      if (a) a.href = finalUrl;
+      window.location.replace(finalUrl);
+    })();
+  </script>
+</BaseLayout>

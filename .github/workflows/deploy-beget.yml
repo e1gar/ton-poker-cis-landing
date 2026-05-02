@@ -1,0 +1,45 @@
+# Деплой статического билда на Beget по SSH (rsync).
+#
+# Секреты в GitHub (в репо не коммитить): Settings → Secrets → Actions
+#   REMOTE_HOST, REMOTE_USER, REMOTE_PATH, REMOTE_PRIVATE_KEY
+#
+# REMOTE_PRIVATE_KEY — приватная половина того ключа, которым ты уже входишь на Beget по SSH.
+# При нестандартном порте SSH добавь ниже remote_port и секрет REMOTE_PORT.
+
+name: Deploy to Beget
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-beget-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install and build
+        run: npm ci && npm run build
+
+      - name: Rsync dist to Beget
+        uses: burnett01/rsync-deployments@8.0.5
+        with:
+          switches: -avzr --delete
+          path: dist/
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+          remote_path: ${{ secrets.REMOTE_PATH }}
