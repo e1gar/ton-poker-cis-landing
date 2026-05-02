@@ -112,4 +112,11 @@ Workflow: [.github/workflows/deploy-beget.yml](.github/workflows/deploy-beget.ym
 
 Если rsync на сервере нет — ошибка вида command not found; тогда поддержка Beget или выкладка SFTP другим экшеном / локальные scripts/deploy-beget.*.
 
+GitHub Actions «Deploy to Beget» упал за секунды — что смотреть в логе job:
+  • Шаг «Validate deploy secrets» — не созданы или пустые REMOTE_HOST / REMOTE_USER /
+    REMOTE_PATH / REMOTE_PRIVATE_KEY (имена без опечаток; ключ целиком BEGIN…END).
+  • «Install and build» — ошибка npm ci (package-lock не совпадает с package.json — почини локально npm i).
+  • «Rsync» — Permission denied (SSH): ключ не тот или не в authorized_keys на Beget;
+    или rsync: command not found на сервере; или нет прав записи в REMOTE_PATH.
+
 CDN Cloudflare перед Beget (прокси, SSL на edge): см. scripts/CLOUDFLARE-SETUP.txt
